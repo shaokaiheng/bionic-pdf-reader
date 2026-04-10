@@ -18,23 +18,30 @@ if %errorlevel% neq 0 (
     exit /b 1
 )
 
-:: Create venv if not exists
-if not exist "venv\Scripts\activate.bat" (
-    echo [INFO] Creating virtual environment...
-    python -m venv venv
-    if %errorlevel% neq 0 (
-        echo [ERROR] Failed to create virtual environment.
-        pause
-        exit /b 1
-    )
-)
-
-:: Activate venv
+:: Validate venv: if activate.bat missing or venv Python is broken, rebuild
+if not exist "venv\Scripts\activate.bat" goto :create_venv
 call venv\Scripts\activate.bat
+python --version >nul 2>&1
+if %errorlevel%==0 goto :venv_ready
+echo [INFO] Existing venv is broken, rebuilding...
+call deactivate >nul 2>&1
+rmdir /s /q venv
+
+:create_venv
+echo [INFO] Creating virtual environment...
+python -m venv venv
+if %errorlevel% neq 0 (
+    echo [ERROR] Failed to create virtual environment.
+    pause
+    exit /b 1
+)
+call venv\Scripts\activate.bat
+
+:venv_ready
 
 :: Install dependencies
 echo [INFO] Checking dependencies...
-pip install -r requirements.txt -q
+python -m pip install -r requirements.txt -q
 
 :: Create uploads folder
 if not exist "uploads" mkdir uploads
