@@ -1,0 +1,339 @@
+/* ============================================================
+   Bionic PDF Reader - 样式表
+   面向 ADHD 用户的 PDF 阅读器，核心特性是 Bionic Reading 效果
+   ============================================================ */
+
+/* --- 全局重置与基础样式 --- */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --bg-primary: #1a1a2e;
+  --bg-secondary: #16213e;
+  --bg-surface: #0f3460;
+  --text-primary: #e8e8e8;
+  --text-secondary: #a0a0b0;
+  --accent: #e94560;
+  --accent-hover: #ff6b81;
+  --toolbar-height: 56px;
+  --radius: 8px;
+}
+
+html, body {
+  height: 100%;
+  font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+/* --- 顶部工具栏 --- */
+.toolbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--toolbar-height);
+  background: var(--bg-secondary);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  z-index: 100;
+  backdrop-filter: blur(12px);
+}
+
+.toolbar-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.tagline {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.toolbar-center {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.page-info {
+  font-size: 14px;
+  color: var(--text-secondary);
+  min-width: 60px;
+  text-align: center;
+}
+
+.separator {
+  color: rgba(255, 255, 255, 0.15);
+  margin: 0 4px;
+}
+
+/* --- 按钮 --- */
+.btn {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-primary);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius);
+  padding: 6px 14px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+  font-weight: 600;
+  padding: 10px 28px;
+  font-size: 15px;
+}
+
+.btn-primary:hover {
+  background: var(--accent-hover);
+}
+
+/* --- 开关组件 --- */
+.toggle-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  user-select: none;
+}
+
+.toggle-label input[type="checkbox"] {
+  display: none;
+}
+
+.toggle-slider {
+  width: 36px;
+  height: 20px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+  position: relative;
+  transition: background 0.3s;
+}
+
+.toggle-slider::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 16px;
+  height: 16px;
+  background: #fff;
+  border-radius: 50%;
+  transition: transform 0.3s;
+}
+
+.toggle-label input:checked + .toggle-slider {
+  background: var(--accent);
+}
+
+.toggle-label input:checked + .toggle-slider::after {
+  transform: translateX(16px);
+}
+
+/* 加粗强度滑块 */
+input[type="range"] {
+  width: 60px;
+  accent-color: var(--accent);
+}
+
+/* --- 上传区域 --- */
+.upload-area {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  padding-top: var(--toolbar-height);
+}
+
+.upload-box {
+  text-align: center;
+  padding: 60px 80px;
+  border: 2px dashed rgba(255, 255, 255, 0.15);
+  border-radius: 16px;
+  background: var(--bg-secondary);
+  transition: border-color 0.3s, background 0.3s;
+}
+
+.upload-box.drag-over {
+  border-color: var(--accent);
+  background: rgba(233, 69, 96, 0.05);
+}
+
+.upload-icon {
+  font-size: 56px;
+  margin-bottom: 16px;
+}
+
+.upload-box h2 {
+  font-size: 22px;
+  margin-bottom: 8px;
+}
+
+.upload-box p {
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+}
+
+.upload-hint {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-top: 8px;
+}
+
+.upload-btn {
+  display: inline-block;
+  margin-top: 8px;
+  cursor: pointer;
+}
+
+/* --- PDF 阅读区域 --- */
+.reader-area {
+  padding-top: calc(var(--toolbar-height) + 20px);
+  padding-bottom: 40px;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+}
+
+.pdf-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+/* 每一页 PDF */
+.pdf-page-wrapper {
+  position: relative;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+  border-radius: 4px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.pdf-page-wrapper canvas {
+  display: block;
+}
+
+/* Bionic 文本覆盖层 */
+.bionic-text-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
+  /* 默认透明，鼠标选中时可见 */
+}
+
+.bionic-text-layer span {
+  position: absolute;
+  color: transparent;
+  white-space: pre;
+  transform-origin: left top;
+  line-height: 1.2;
+  display: inline-block;
+}
+
+/* Bionic 模式开启时：颜色由 JS 从 canvas 采样后动态设置 */
+.bionic-active .bionic-text-layer span b {
+  font-weight: 800;
+}
+
+/* 加粗强度级别 */
+.bionic-intensity-1 .bionic-text-layer span b { font-weight: 600; }
+.bionic-intensity-2 .bionic-text-layer span b { font-weight: 800; }
+.bionic-intensity-3 .bionic-text-layer span b { font-weight: 900; }
+.bionic-intensity-4 .bionic-text-layer span b {
+  font-weight: 900;
+  text-shadow: 0.3px 0 0 currentColor;
+}
+
+/* Bionic 模式下隐藏 canvas 上的文字（通过白色覆盖层） */
+.bionic-active .pdf-page-wrapper .canvas-text-mask {
+  display: block;
+}
+
+.canvas-text-mask {
+  display: none;
+}
+
+/* --- 加载动画 --- */
+.loading-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+  gap: 16px;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid rgba(255, 255, 255, 0.2);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* --- 响应式适配 --- */
+@media (max-width: 768px) {
+  .toolbar {
+    flex-wrap: wrap;
+    height: auto;
+    padding: 8px 12px;
+    gap: 8px;
+  }
+
+  .toolbar-left .tagline { display: none; }
+
+  .upload-box {
+    margin: 0 16px;
+    padding: 40px 24px;
+  }
+}

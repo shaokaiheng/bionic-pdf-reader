@@ -1,0 +1,337 @@
+/* ============================================================
+   Bionic PDF Reader - Viewer Styles
+   ============================================================ */
+*,*::before,*::after { margin:0; padding:0; box-sizing:border-box; }
+
+:root {
+  --toolbar-h: 44px;
+  --sidebar-w: 260px;
+  --bg: #2b2b2b;
+  --bg-toolbar: #323232;
+  --bg-sidebar: #252525;
+  --text: #d4d4d4;
+  --text-dim: #888;
+  --accent: #4a9eff;
+  --border: #444;
+}
+
+html, body {
+  height: 100%;
+  font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+  font-size: 13px;
+  background: var(--bg);
+  color: var(--text);
+  overflow: hidden;
+}
+
+/* --- Toolbar --- */
+.toolbar {
+  position: fixed; top:0; left:0; right:0;
+  height: var(--toolbar-h);
+  background: var(--bg-toolbar);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  padding: 0 8px;
+  gap: 6px;
+  z-index: 100;
+}
+
+.toolbar-group {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.separator {
+  width: 1px;
+  height: 20px;
+  background: var(--border);
+  margin: 0 4px;
+}
+
+.tool-btn {
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  color: var(--text);
+  width: 30px; height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background .15s;
+}
+.tool-btn:hover { background: rgba(255,255,255,.1); }
+.tool-btn:disabled { opacity: .35; cursor: default; }
+.tool-btn.small { width: 24px; height: 24px; font-size: 10px; }
+
+.file-name {
+  font-size: 12px;
+  color: var(--text-dim);
+  max-width: 180px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin: 0 2px;
+}
+
+.page-input {
+  width: 48px;
+  background: rgba(255,255,255,.08);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  color: var(--text);
+  text-align: center;
+  font-size: 12px;
+  padding: 3px 2px;
+  -moz-appearance: textfield;
+}
+.page-input::-webkit-inner-spin-button { display: none; }
+.page-sep { color: var(--text-dim); margin: 0 2px; }
+.page-total { color: var(--text-dim); min-width: 20px; }
+
+.scale-select {
+  background: rgba(255,255,255,.08);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  color: var(--text);
+  padding: 3px 4px;
+  font-size: 12px;
+  cursor: pointer;
+}
+.scale-select option { background: var(--bg-toolbar); color: var(--text); }
+
+/* Search */
+.search-box {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  background: rgba(255,255,255,.06);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 0 4px;
+}
+.search-box input {
+  background: transparent;
+  border: none;
+  color: var(--text);
+  font-size: 12px;
+  padding: 4px;
+  width: 140px;
+  outline: none;
+}
+.find-msg {
+  font-size: 11px;
+  color: var(--text-dim);
+  white-space: nowrap;
+  margin-left: 4px;
+}
+
+/* Bionic toggle */
+.bionic-toggle {
+  display: flex; align-items: center; gap: 6px;
+  cursor: pointer; user-select: none;
+  margin-left: 8px;
+}
+.bionic-toggle input { display: none; }
+.toggle-track {
+  width: 32px; height: 18px;
+  background: rgba(255,255,255,.15);
+  border-radius: 9px;
+  position: relative;
+  transition: background .2s;
+}
+.toggle-thumb {
+  position: absolute;
+  top: 2px; left: 2px;
+  width: 14px; height: 14px;
+  background: #fff;
+  border-radius: 50%;
+  transition: transform .2s;
+}
+.bionic-toggle input:checked ~ .toggle-track {
+  background: var(--accent);
+}
+.bionic-toggle input:checked ~ .toggle-track .toggle-thumb {
+  transform: translateX(14px);
+}
+.toggle-text { font-size: 12px; color: var(--text-dim); }
+
+.intensity-control {
+  display: flex; align-items: center; gap: 4px;
+  font-size: 11px; color: var(--text-dim);
+  margin-left: 4px;
+}
+.intensity-control input[type="range"] {
+  width: 50px;
+  accent-color: var(--accent);
+}
+
+/* --- Main Layout --- */
+.main-container {
+  position: fixed;
+  top: var(--toolbar-h);
+  left: 0; right: 0; bottom: 0;
+  display: flex;
+  overflow: hidden;
+}
+
+/* --- Sidebar --- */
+.sidebar {
+  width: var(--sidebar-w);
+  background: var(--bg-sidebar);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  overflow: hidden;
+  transition: margin-left .2s;
+}
+.sidebar.hidden {
+  margin-left: calc(-1 * var(--sidebar-w));
+}
+
+.sidebar-tabs {
+  display: flex;
+  border-bottom: 1px solid var(--border);
+}
+.sidebar-tab {
+  flex: 1;
+  padding: 8px;
+  background: transparent;
+  border: none;
+  color: var(--text-dim);
+  cursor: pointer;
+  font-size: 12px;
+  text-align: center;
+  transition: color .15s;
+}
+.sidebar-tab.active {
+  color: var(--text);
+  border-bottom: 2px solid var(--accent);
+}
+
+.sidebar-panel {
+  display: none;
+  overflow-y: auto;
+  flex: 1;
+  padding: 8px;
+}
+.sidebar-panel.active { display: block; }
+
+/* Outline */
+.outline-view { font-size: 12px; }
+.outline-item {
+  padding: 4px 6px;
+  cursor: pointer;
+  border-radius: 3px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--text);
+  transition: background .1s;
+}
+.outline-item:hover { background: rgba(255,255,255,.08); }
+.outline-children { padding-left: 14px; }
+.outline-empty { color: var(--text-dim); font-style: italic; padding: 12px; }
+
+/* Thumbnails */
+.thumbnail-view {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 0;
+}
+.thumb-wrapper {
+  cursor: pointer;
+  border: 2px solid transparent;
+  border-radius: 3px;
+  transition: border-color .15s;
+}
+.thumb-wrapper:hover,
+.thumb-wrapper.active { border-color: var(--accent); }
+.thumb-wrapper canvas { display: block; }
+.thumb-label {
+  text-align: center;
+  font-size: 11px;
+  color: var(--text-dim);
+  margin-top: 2px;
+}
+
+/* Outer wrapper takes flex space, inner container is absolute for PDF.js */
+.viewer-outer {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+}
+.viewer-container {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  overflow: auto;
+  background: #525659;
+}
+
+/* Upload Area */
+.upload-area {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+.upload-box {
+  text-align: center;
+  padding: 48px 64px;
+  border: 2px dashed rgba(255,255,255,.15);
+  border-radius: 12px;
+  background: rgba(0,0,0,.2);
+  transition: border-color .2s;
+}
+.upload-box.drag-over { border-color: var(--accent); }
+.upload-icon { font-size: 48px; margin-bottom: 12px; }
+.upload-box h2 { font-size: 18px; margin-bottom: 6px; }
+.upload-box p { color: var(--text-dim); margin-bottom: 8px; font-size: 13px; }
+.upload-hint { font-size: 11px; color: var(--text-dim); margin-top: 6px; }
+.btn-primary {
+  display: inline-block;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 24px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity .15s;
+}
+.btn-primary:hover { opacity: .85; }
+
+/* PDF.js page overrides */
+.pdfViewer .page {
+  margin: 10px auto;
+  box-shadow: 0 2px 12px rgba(0,0,0,.3);
+}
+
+/* Bionic text layer overrides - span 背景遮盖 canvas 原始文字 */
+.bionic-active .textLayer span[data-bionic-original] {
+  /* 扩展覆盖区域确保完全遮住 canvas 上的原始文字 */
+  padding: 3px 1px;
+  margin: -3px -1px;
+}
+/* 合成加粗：用 text-stroke 增加视觉重量，不改变字符宽度，保留 PDF 原始字形比例 */
+/* color: inherit 覆盖 PDF.js 的 .textLayer span { color: transparent } */
+.bionic-active .textLayer .bionic-b {
+  color: inherit;
+  position: static;
+  white-space: pre;
+  display: inline;
+  -webkit-text-stroke: 0.4px currentColor;
+}
+.bionic-intensity-1 .textLayer .bionic-b { -webkit-text-stroke: 0.2px currentColor; }
+.bionic-intensity-2 .textLayer .bionic-b { -webkit-text-stroke: 0.4px currentColor; }
+.bionic-intensity-3 .textLayer .bionic-b { -webkit-text-stroke: 0.7px currentColor; }
+.bionic-intensity-4 .textLayer .bionic-b {
+  -webkit-text-stroke: 0.9px currentColor;
+  text-shadow: 0.3px 0 0 currentColor;
+}

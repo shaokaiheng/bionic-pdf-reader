@@ -1,0 +1,16 @@
+__pycache__/
+*.pyc
+.venv/
+venv/
+uploads/*.pdf
+!uploads/.gitkeep
+.env
+*.egg-info/
+dist/
+build/
+flask.log
+test_screenshots/
+verify_screenshots/
+test_render.py
+verify_*.py
+for-windows/

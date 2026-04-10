@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bionic PDF Reader</title>
+  <link rel="stylesheet" href="/static/pdfjs/pdf_viewer.css" />
+  <link rel="stylesheet" href="/static/css/viewer.css" />
+</head>
+<body>
+  <!-- Toolbar -->
+  <header id="toolbar" class="toolbar">
+    <div class="toolbar-group">
+      <button id="openFile" class="tool-btn" title="Open File">
+        <svg width="16" height="16" viewBox="0 0 16 16"><path fill="currentColor" d="M1 3.5A1.5 1.5 0 012.5 2h3.879a1.5 1.5 0 011.06.44l1.122 1.12A1.5 1.5 0 009.62 4H13.5A1.5 1.5 0 0115 5.5v7a1.5 1.5 0 01-1.5 1.5h-11A1.5 1.5 0 011 12.5v-9z"/></svg>
+      </button>
+      <button id="closeFile" class="tool-btn" title="Close File" disabled>
+        <svg width="16" height="16" viewBox="0 0 16 16"><path fill="currentColor" d="M4.646 4.646a.5.5 0 01.708 0L8 7.293l2.646-2.647a.5.5 0 01.708.708L8.707 8l2.647 2.646a.5.5 0 01-.708.708L8 8.707l-2.646 2.647a.5.5 0 01-.708-.708L7.293 8 4.646 5.354a.5.5 0 010-.708z"/></svg>
+      </button>
+      <span id="fileName" class="file-name"></span>
+      <span class="separator"></span>
+      <button id="sidebarToggle" class="tool-btn" title="Toggle Sidebar">
+        <svg width="16" height="16" viewBox="0 0 16 16"><path fill="currentColor" d="M2 2h4v12H2zm6 0h6v12H8z" opacity=".7"/></svg>
+      </button>
+      <span class="separator"></span>
+      <button id="previous" class="tool-btn" title="Previous Page">
+        <svg width="16" height="16" viewBox="0 0 16 16"><path fill="currentColor" d="M8 3L3 8l5 5V3z"/></svg>
+      </button>
+      <input id="pageNumber" class="page-input" type="number" min="1" value="1" />
+      <span class="page-sep">/</span>
+      <span id="numPages" class="page-total">-</span>
+      <button id="next" class="tool-btn" title="Next Page">
+        <svg width="16" height="16" viewBox="0 0 16 16"><path fill="currentColor" d="M8 3l5 5-5 5V3z"/></svg>
+      </button>
+    </div>
+    <div class="toolbar-group">
+      <button id="zoomOut" class="tool-btn" title="Zoom Out">
+        <svg width="16" height="16" viewBox="0 0 16 16"><path fill="currentColor" d="M3 7h10v2H3z"/></svg>
+      </button>
+      <select id="scaleSelect" class="scale-select">
+        <option value="0.5">50%</option>
+        <option value="0.75">75%</option>
+        <option value="1">100%</option>
+        <option value="1.25">125%</option>
+        <option value="1.5" selected>150%</option>
+        <option value="2">200%</option>
+        <option value="3">300%</option>
+        <option value="page-width">Page Width</option>
+        <option value="page-fit">Page Fit</option>
+      </select>
+      <button id="zoomIn" class="tool-btn" title="Zoom In">
+        <svg width="16" height="16" viewBox="0 0 16 16"><path fill="currentColor" d="M7 3v4H3v2h4v4h2V9h4V7H9V3z"/></svg>
+      </button>
+    </div>
+    <div class="toolbar-group">
+      <div class="search-box" id="searchBox">
+        <input id="searchInput" type="text" placeholder="Search..." />
+        <button id="findPrevious" class="tool-btn small" title="Previous Match">&#9650;</button>
+        <button id="findNext" class="tool-btn small" title="Next Match">&#9660;</button>
+        <span id="findMsg" class="find-msg"></span>
+      </div>
+    </div>
+    <div class="toolbar-group">
+      <label class="bionic-toggle" title="Bionic Reading Mode">
+        <input type="checkbox" id="bionicToggle" />
+        <span class="toggle-track"><span class="toggle-thumb"></span></span>
+        <span class="toggle-text">Bionic</span>
+      </label>
+      <label class="intensity-control" title="Bold Intensity">
+        <span>Intensity</span>
+        <input type="range" id="bionicIntensity" min="1" max="4" value="2" />
+      </label>
+    </div>
+  </header>
+
+  <!-- Main Layout -->
+  <div id="mainContainer" class="main-container">
+    <!-- Sidebar -->
+    <aside id="sidebar" class="sidebar hidden">
+      <div class="sidebar-tabs">
+        <button class="sidebar-tab active" data-tab="outline">Outline</button>
+        <button class="sidebar-tab" data-tab="thumbnails">Pages</button>
+      </div>
+      <div id="outlinePanel" class="sidebar-panel active">
+        <div id="outlineView" class="outline-view"></div>
+      </div>
+      <div id="thumbnailPanel" class="sidebar-panel">
+        <div id="thumbnailView" class="thumbnail-view"></div>
+      </div>
+    </aside>
+
+    <!-- PDF Viewer -->
+    <div class="viewer-outer">
+      <div id="viewerContainer" class="viewer-container">
+        <!-- Upload Area (shown initially) -->
+        <div id="uploadArea" class="upload-area">
+          <div class="upload-box" id="dropZone">
+            <div class="upload-icon">&#128196;</div>
+            <h2>Drop PDF here</h2>
+            <p>or click to select a file</p>
+            <label class="btn-primary upload-btn">
+              Choose PDF
+              <input type="file" id="fileInput" accept=".pdf" hidden />
+            </label>
+            <p class="upload-hint">Max 50 MB</p>
+          </div>
+        </div>
+        <!-- PDF viewer container (pdfjs renders here) -->
+        <div id="viewer" class="pdfViewer" style="display:none;"></div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="/static/js/viewer.js"></script>
+</body>
+</html>

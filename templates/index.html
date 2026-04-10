@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bionic PDF Reader - ADHD 友好阅读器</title>
+  <link rel="stylesheet" href="/static/css/style.css" />
+  <!-- PDF.js 从 CDN 加载 -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.9.155/pdf.min.mjs" type="module"></script>
+</head>
+<body>
+  <!-- 顶部工具栏 -->
+  <header class="toolbar">
+    <div class="toolbar-left">
+      <h1 class="logo">Bionic PDF Reader</h1>
+      <span class="tagline">ADHD 友好阅读模式</span>
+    </div>
+    <div class="toolbar-center">
+      <button id="prev-page" class="btn" disabled title="上一页">&#9664; 上一页</button>
+      <span id="page-info" class="page-info">- / -</span>
+      <button id="next-page" class="btn" disabled title="下一页">下一页 &#9654;</button>
+      <span class="separator">|</span>
+      <button id="zoom-out" class="btn" title="缩小">−</button>
+      <span id="zoom-level" class="page-info">100%</span>
+      <button id="zoom-in" class="btn" title="放大">+</button>
+    </div>
+    <div class="toolbar-right">
+      <label class="toggle-label" title="开启/关闭 Bionic Reading 效果">
+        <input type="checkbox" id="bionic-toggle" checked />
+        <span class="toggle-slider"></span>
+        Bionic 模式
+      </label>
+      <label class="toggle-label" title="调节加粗强度">
+        加粗强度
+        <input type="range" id="bold-intensity" min="1" max="4" value="2" />
+      </label>
+    </div>
+  </header>
+
+  <!-- 上传区域（初始状态） -->
+  <main id="upload-area" class="upload-area">
+    <div class="upload-box" id="drop-zone">
+      <div class="upload-icon">📄</div>
+      <h2>拖拽 PDF 文件到此处</h2>
+      <p>或者点击下方按钮选择文件</p>
+      <label class="btn btn-primary upload-btn">
+        选择 PDF 文件
+        <input type="file" id="file-input" accept=".pdf" hidden />
+      </label>
+      <p class="upload-hint">支持最大 50 MB 的 PDF 文件</p>
+    </div>
+  </main>
+
+  <!-- PDF 阅读区域（加载后显示） -->
+  <main id="reader-area" class="reader-area" style="display: none;">
+    <div id="pdf-container" class="pdf-container">
+      <!-- PDF 页面将动态插入此处 -->
+    </div>
+  </main>
+
+  <!-- 加载指示器 -->
+  <div id="loading-overlay" class="loading-overlay" style="display: none;">
+    <div class="spinner"></div>
+    <p>正在加载 PDF...</p>
+  </div>
+
+  <script type="module" src="/static/js/reader.js"></script>
+</body>
+</html>
