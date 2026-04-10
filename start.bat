@@ -44,5 +44,5 @@ echo.
 echo [INFO] Starting server at http://127.0.0.1:5000
 echo [INFO] Press Ctrl+C to stop.
 echo.
-start "" http://127.0.0.1:5000
+start /b cmd /c "ping -n 3 127.0.0.1 >nul && start "" http://127.0.0.1:5000"
 python app.py
